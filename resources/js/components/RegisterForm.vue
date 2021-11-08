@@ -83,24 +83,23 @@
                     if (response.data === 1 ) {
                         this.$refs.shortUrlDiv.classList.add('invalid');
                         this.shortUrlError = "url already registered";
-                        this.shortUrlIsValid = true;
-                        return;
-                    } else {
                         this.shortUrlIsValid = false;
+                    } else {
+                        this.shortUrlIsValid = true;
+
+                        if (this.shortUrlIsValid && this.originalUrlIsValid) {
+
+                            console.log(this.shortUrl, this.originalUrl);
+                            axios.post('api/url/store', {
+                                short_url: this.shortUrl,
+                                original_url: this.originalUrl
+                            })
+                            .then(() => {
+                                this.accessUrl = `/api/access/${this.shortUrl}`;
+                            });
+                        }
                     }
                 });
-
-                if (this.shortUrlIsValid && this.originalUrlIsValid) {
-
-                    console.log(this.shortUrl, this.originalUrl);
-                    axios.post('api/url/store', {
-                        short_url: this.shortUrl,
-                        original_url: this.originalUrl
-                    })
-                    .then(() => {
-                        this.accessUrl = `/api/url/access/${this.shortUrl}`;
-                    });
-                }
             }
         }
     }

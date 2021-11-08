@@ -22,9 +22,9 @@ use App\Http\Controllers\UrlController;
 Route::get('/urls', [UrlController::class, 'list']);
 
 Route::prefix('/url')->group( function () {
-        Route::get('/access/{short_url}', [UrlController::class, 'access']);
         Route::get('/exists/{short_url}', [UrlController::class, 'checkIfExists']);
         Route::post('/store', [UrlController::class, 'store']);
     }
 );
 
+Route::get('/access/{short_url}', [UrlController::class, 'access']);

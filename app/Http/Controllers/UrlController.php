@@ -28,6 +28,8 @@ class UrlController extends Controller
         if ($result == NULL) {
             return "Url não encontrada.";
         } else {
+            RegisteredUrl::where('short_url', $short_url)->increment('access_counter', 1);
+
             return new RedirectResponse($result->original_url);
         }
     }

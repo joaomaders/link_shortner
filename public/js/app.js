@@ -2179,24 +2179,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     _this.$refs.shortUrlDiv.classList.add('invalid');
 
                     _this.shortUrlError = "url already registered";
-                    _this.shortUrlIsValid = true;
-                    return;
-                  } else {
                     _this.shortUrlIsValid = false;
+                  } else {
+                    _this.shortUrlIsValid = true;
+
+                    if (_this.shortUrlIsValid && _this.originalUrlIsValid) {
+                      console.log(_this.shortUrl, _this.originalUrl);
+                      axios__WEBPACK_IMPORTED_MODULE_2___default().post('api/url/store', {
+                        short_url: _this.shortUrl,
+                        original_url: _this.originalUrl
+                      }).then(function () {
+                        _this.accessUrl = "/api/access/".concat(_this.shortUrl);
+                      });
+                    }
                   }
                 });
 
-                if (_this.shortUrlIsValid && _this.originalUrlIsValid) {
-                  console.log(_this.shortUrl, _this.originalUrl);
-                  axios__WEBPACK_IMPORTED_MODULE_2___default().post('api/url/store', {
-                    short_url: _this.shortUrl,
-                    original_url: _this.originalUrl
-                  }).then(function () {
-                    _this.accessUrl = "/api/url/access/".concat(_this.shortUrl);
-                  });
-                }
-
-              case 3:
+              case 2:
               case "end":
                 return _context.stop();
             }
