@@ -4,7 +4,7 @@
 ```/api/urls```
 
 #### Access by short url
-```/api/url/access/short_url```
+```/api/access/short_url```
 
 #### Store new Url
 ```/api/url/store```
