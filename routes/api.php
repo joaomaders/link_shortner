@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UrlController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::get('/urls', [UrlController::class, 'list']);
+
+Route::prefix('/url')->group( function () {
+        Route::get('/access/{short_url}', [UrlController::class, 'access']);
+        Route::get('/exists/{short_url}', [UrlController::class, 'checkIfExists']);
+        Route::post('/store', [UrlController::class, 'store']);
+    }
+);
+
