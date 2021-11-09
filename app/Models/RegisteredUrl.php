@@ -9,4 +9,7 @@ class RegisteredUrl extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    public $casts = [
+        'access_infos'=>'array'
+    ];
 }

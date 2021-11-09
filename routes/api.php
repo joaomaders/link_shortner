@@ -15,10 +15,6 @@ use App\Http\Controllers\UrlController;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::get('/urls', [UrlController::class, 'list']);
 
 Route::prefix('/url')->group( function () {

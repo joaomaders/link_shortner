@@ -21,14 +21,26 @@ class UrlController extends Controller
         return $result == NULL ? 0 : 1;
     }
 
-    public function access($short_url)
+    public function access(Request $request, $short_url)
     {
         $result = RegisteredUrl::where('short_url', $short_url)->first();
 
         if ($result == NULL) {
             return "Url não encontrada.";
         } else {
-            RegisteredUrl::where('short_url', $short_url)->increment('access_counter', 1);
+
+            $this->registerAccess($short_url);
+
+            $access_infos = $result->access_infos;
+
+            $access_infos[] = [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ];
+
+            $result->access_infos = $access_infos;
+
+            $result->save();
 
             return new RedirectResponse($result->original_url);
         }
@@ -44,6 +56,7 @@ class UrlController extends Controller
         $newItem = new RegisteredUrl;
         $newItem['original_url'] = $request["original_url"];
         $newItem['short_url'] = $request["short_url"];
+        $newItem['access_infos'] = [];
         $newItem->save();
 
         return $newItem;

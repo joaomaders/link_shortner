@@ -18,7 +18,7 @@ class CreateRegisteredUrlsTable extends Migration
             $table->string('original_url');
             $table->string('short_url');
             $table->bigInteger('access_counter')->default(0);
-            $table->string('access_infos')->nullable();
+            $table->json('access_infos');
         });
     }
 
