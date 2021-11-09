@@ -1,9 +1,20 @@
 <template>
     <div class="main-div">
-        <form action="submit" @submit.prevent class="register-form">
-            <div class="field-div" ref="originalUrlDiv">
-                <input type="text" id="original-url" v-model="originalUrl" placeholder="Paste a link to shorten it">
-                <span class="error">{{ originalUrlError }}</span>
+        <div v-if="accessUrl">
+            <p class="access-link"> You're access link is <a :href="accessUrl"> {{ accessUrl }} </a></p>
+
+            <p @click="reset">reset</p>
+        </div>
+        <form action="submit" @submit.prevent class="register-form" v-else>
+            <div class="main-field" ref="originalUrlDiv">
+                <div class="left-part">
+                    <input type="text" id="original-url" v-model="originalUrl" placeholder="Paste a link to shorten it">
+                    <span class="error">{{ originalUrlError }}</span>
+                </div>
+
+                <div class="right-part">
+                    <button class="submit-button" @click="create()"> Shorten </button>
+                </div>
             </div>
 
             <div class="field-div checkbox">
@@ -15,10 +26,9 @@
                 <input type="text" id="original-url" placeholder="Enter a custom url" v-model="shortUrl">
                 <span class="error">{{ shortUrlError }}</span>
             </div>
-
-            <button @click="create()" v-if="!accessUrl">Create short url</button>
-            <p class="access-link" v-else> You're access link is <a :href="accessUrl"> {{ accessUrl }} </a></p>
         </form>
+
+        <recent-links :hasNewItem="accessUrl"></recent-links>
     </div>
 </template>
 
@@ -36,7 +46,6 @@
                 shortUrlError: null,
                 shortUrlIsValid: false,
                 accessUrl: undefined,
-                registeredUrls: [],
                 personalizeShortUrl: false
             }
         },
@@ -56,7 +65,18 @@
 
                 if (randomString.length > length) return randomString.slice(0, length);
 
-                this.shortUrl =  this.generateRandomString(length, randomString);
+                this.shortUrl = this.generateRandomString(length, randomString);
+            },
+
+            reset () {
+                this.originalUrl = '',
+                this.originalUrlError = null,
+                this.originalUrlIsValid = false,
+                this.shortUrl = '',
+                this.shortUrlError = null,
+                this.shortUrlIsValid = false,
+                this.accessUrl = undefined,
+                this.personalizeShortUrl = false
             },
 
             validateOriginalUrl (newVal) {
@@ -101,7 +121,7 @@
                 }
 
                 if (this.originalUrlIsValid) {
-                    if (this.shortUrl === '') {
+                    if (this.shortUrl === '' || this.shortUrl.length < 6) {
                         this.generateRandomString(6);
                     }
 
@@ -135,13 +155,35 @@
 
 <style scoped lang="scss">
     $black: #3d3d3d;
+    $background: #282a36;
+    $gray:	#44475a;
+    $lightgray:	#f8f8f2;
+    $lightgray2:	#f8f8f282;
+    $darkblue:	#6272a4;
+    $cyan	:#8be9fd;
+    $green	:#50fa7b;
+    $orange	:#ffb86c;
+    $pink	:#ff79c6;
+    $purple	:#bd93f9;
+    $red:#ff5555;
+    $yellow:#f1fa8c;
 
     .main-div {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 30px;
+        padding: 30px 0;
+
+        .access-link {
+            font-size: 15px;
+            color: $lightgray;
+            font-weight: 500;
+
+            a {
+                color: $cyan;
+            }
+        }
 
         .register-form {
             display: flex;
@@ -150,6 +192,70 @@
             justify-content: center;
             gap: 10px;
             width: 100%;
+
+            .main-field {
+                width: 100%;
+                display: flex;
+                align-items: flex-start;
+                justify-content: center;
+                background: transparent;
+                overflow: hidden;
+
+                &.invalid {
+                    .left-part {
+                        input {
+                            border-color: $red;
+                        }
+                    }
+                }
+
+                .left-part {
+                    width: 80%;
+
+                    input {
+                        height: 40px;
+                        width: 100%;
+                        font-size: 15px;
+
+                        border: none;
+                        outline: none;
+                        background: transparent;
+                        border-bottom: solid 2px $lightgray2;
+                        color: $lightgray;
+
+                        &::placeholder {
+                            color: $lightgray2;
+                        }
+                    }
+
+                    .error {
+                        color: $red;
+                        font-size: 15px;
+                        font-weight: 500;
+                    }
+                }
+
+                .right-part {
+                    width: 20%;
+
+                    .submit-button {
+                        background: $lightgray2;
+
+                        width: 100%;
+                        height: 40px;
+                        font-size: 15px;
+                        font-weight: 600;
+                        border: none;
+                        outline: none;
+                        color: #FFFFFF;
+
+                        &:hover {
+                            background: $lightgray;
+                            color: $orange;
+                        }
+                    }
+                }
+            }
 
             .field-div {
                 display: flex;
@@ -162,76 +268,50 @@
                     flex-direction: row;
                     align-items: center;
                     justify-content: flex-start;
-                    gap: 20px;
+                    gap: 10px;
 
                     input {
-                        width: 15px;
-                        height: 15px;
+                        width: 12.5px;
+                        height: 12.5px;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
                     }
                 }
 
                 label {
-                    font-size: 14px;
+                    font-size: 13px;
                     margin: 0;
-                    font-weight: 500;
-                    color: $black;
+                    font-weight: 600;
+                    color: $lightgray;
                 }
 
                 input {
-                    height: 30px;
+                    height: 40px;
                     width: 100%;
-                    border: solid 1px $black;
-                    border-radius: 8px;
-                    padding: 0 5px;
-                    margin: 0;
                     font-size: 15px;
-                    outline: none;
-                    border: solid 2px $black;
 
-                    &:focus {
-                        border-color: green;
+                    border: none;
+                    outline: none;
+                    background: transparent;
+                    border-bottom: solid 2px $lightgray2;
+                    color: $lightgray;
+
+                    &::placeholder {
+                        color: $lightgray2;
                     }
                 }
 
                 &.invalid {
                     input {
-                        border: solid 2px red;
+                        border-color: $red;
                         outline: none;
                     }
                     .error {
-                        color: red;
+                        color: $red;
                         font-size: 15px;
                     }
                 }
-            }
-
-            button {
-                border-radius: 16px;
-                border: none;
-                outline: none;
-                width: 100%;
-                height: 30px;
-
-                background: lightgray;
-                transition: all .2s;
-
-                color: $black;
-                font-size: 17px;
-                font-weight: 700;
-
-                margin-top: 10px;
-
-                &:hover {
-                    background: gray;
-                    color: #FFFFFF;
-                    transition: all .2s;
-                }
-            }
-
-            .access-link {
-                font-size: 15px;
-                color: $black;
-                font-weight: 500;
             }
         }
     }

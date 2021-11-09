@@ -10,7 +10,6 @@
     <div id="app">
         <main-app>
             <register-form></register-form>
-            <recent-links></recent-links>
         </main-app>
     </div>
 </body>
