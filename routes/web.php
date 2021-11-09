@@ -20,3 +20,7 @@ Route::get('/link-shortner', function () {
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/{short_url}', function ($short_url) {
+    return redirect("/api/access/$short_url");
+});
