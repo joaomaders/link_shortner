@@ -8,7 +8,10 @@
 </head>
 <body>
     <div id="app">
-        <register-form></register-form>
+        <main-app>
+            <register-form></register-form>
+            <recent-links></recent-links>
+        </main-app>
     </div>
 </body>
     <script src="{{ asset('js/app.js') }}"></script>

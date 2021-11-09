@@ -15,7 +15,8 @@ use App\Http\Controllers\UrlController;
 |
 */
 
-Route::get('/urls', [UrlController::class, 'list']);
+Route::get('/list', [UrlController::class, 'list']);
+Route::get('/urls', [UrlController::class, 'index']);
 
 Route::prefix('/url')->group( function () {
         Route::get('/exists/{short_url}', [UrlController::class, 'checkIfExists']);

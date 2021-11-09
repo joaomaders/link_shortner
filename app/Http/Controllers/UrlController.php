@@ -11,7 +11,12 @@ class UrlController extends Controller
 {
     public function list()
     {
-        return RegisteredUrl::all();
+        return RegisteredUrl::orderBy('id', 'desc')->limit(5)->get();
+    }
+
+    public function index()
+    {
+        return RegisteredUrl::get();
     }
 
     public function checkIfExists($short_url)
