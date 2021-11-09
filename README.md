@@ -1,10 +1,13 @@
 # link_shortner
+
+#### List the last 5 urls saved
+```/api/urls```
  
 #### List all saved urls
 ```/api/urls```
 
 #### Access by short url
-```/api/access/short_url```
+```/{short_url}```
 
 #### Store new Url
 ```/api/url/store```
