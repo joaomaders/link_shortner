@@ -6,7 +6,7 @@
 #### List all saved urls
 ```/api/urls```
 
-#### Access by short url
+#### Redirect to the original url
 ```/{short_url}```
 
 #### Store new Url
