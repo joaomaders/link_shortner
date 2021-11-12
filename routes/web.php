@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/link-shortner', function () {
-    return view('link-shortner');
+Route::get('/links-list', function () {
+    return view('links-list');
 });
 
 Route::get('/', function () {

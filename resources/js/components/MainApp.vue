@@ -13,12 +13,16 @@ export default {
 </script>
 <style lang="scss" scoped>
     .main-app {
-        width: 100vw;
-        height: 100vh;
+        padding: 30px 0;
+        width: 100vw !important;
+        padding: 0 5vw;
+        min-height: 100vh;
+        height: auto;
         background-color: #6272a4;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
+        overflow: hidden;
 
         .width-div {
             width: calc(min(100vw, 500px));

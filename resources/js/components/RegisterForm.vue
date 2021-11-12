@@ -1,9 +1,15 @@
 <template>
     <div class="main-div">
         <div v-if="accessUrl">
-            <p class="access-link"> You're access link is <a :href="accessUrl"> {{ accessUrl }} </a></p>
+            <p class="access-link">
+                You're access link is <a :href="accessUrl"> {{ accessUrl }} </a>
 
-            <p @click="reset">reset</p>
+                <span class="copy" @click="copyURL">
+                    <font-awesome-icon icon="copy" />
+                </span>
+            </p>
+
+            <p @click="reset" class="new-url"> New url </p>
         </div>
         <form action="submit" @submit.prevent class="register-form" v-else>
             <div class="main-field" ref="originalUrlDiv">
@@ -28,7 +34,7 @@
             </div>
         </form>
 
-        <recent-links :hasNewItem="accessUrl"></recent-links>
+        <links-list :hasNewItem="accessUrl" v-if="!accessUrl"></links-list>
     </div>
 </template>
 
@@ -58,6 +64,22 @@
             }, 250),
         },
         methods: {
+            makeToast(append = false, url) {
+                this.$bvToast.toast(url, {
+                    title: 'Link copied!',
+                    autoHideDelay: 3000,
+                    appendToast: append
+                });
+            },
+            async copyURL () {
+                try {
+                    await navigator.clipboard.writeText(`https://127.0.0.1:8000/${this.accessUrl}`);
+                    this.makeToast(false, this.accessUrl);
+                } catch($e) {
+                    alert('Cannot copy');
+                }
+            },
+
             generateRandomString (length, randomString="") {
                 randomString += Math.random().toString(20).substr(2, length);
 
@@ -143,6 +165,9 @@
                                 })
                                 .then(() => {
                                     this.accessUrl = `http://127.0.0.1:8000/${this.shortUrl}`;
+                                })
+                                .then(() => {
+                                    this.$root.$emit('refreshRecentLinksList');
                                 });
                             }
                         }
@@ -180,8 +205,30 @@
             color: $lightgray;
             font-weight: 500;
 
+            .copy {
+                margin-left: 5px;
+                color: $lightgray2;
+                cursor: pointer;
+
+                &:hover {
+                    color: $orange;
+                }
+            }
+
             a {
                 color: $cyan;
+            }
+        }
+
+        .new-url {
+            color: $orange;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+
+            &:hover {
+                color: $lightgray;
             }
         }
 
