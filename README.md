@@ -32,7 +32,7 @@
 ```/api/urls```
  
 #### List all saved urls
-```/api/urls```
+```/api/index```
 
 #### Redirect to the original url
 ```/{short_url}```
